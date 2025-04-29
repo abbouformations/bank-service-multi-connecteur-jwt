@@ -1,0 +1,115 @@
+type Query{
+    customers:[CustomerDto]
+    customerByIdentity(identity:String):CustomerDto
+    bankAccounts : [BankAccountDto]
+    bankAccountByRib (rib:String):BankAccountDto
+    getTransactions (dto:GetTransactionListRequest):[TransactionDto]
+}
+
+type Mutation {
+    createCustomer(dto:AddCustomerRequest):AddCustomerResponse
+    addBankAccount(dto:AddBankAccountRequest):AddBankAccountResponse
+    addWirerTransfer(dto:AddWirerTransferRequest):AddWiredTransferResponse
+    updateCustomer(identityRef:String,dto:UpdateCustomerRequest):UpdateCustomerResponse
+    deleteCustomer(identityRef:String):String
+}
+
+type CustomerDto {
+    username : String,
+    identityRef : String,
+    firstname:String,
+    lastname:String,
+}
+
+type BankAccountDto {
+    rib:String,
+    amount:Float,
+    createdAt:String,
+    accountStatus:AccountStatus,
+    customer:CustomerDto,
+}
+
+type TransactionDto {
+    createdAt:String,
+    transactionType:TransactionType,
+    amount:Float,
+    bankAccount:BankAccountDto
+    user:userDto
+}
+
+type userDto {
+    username:String
+    firstname:String
+    lastname:String
+}
+
+enum AccountStatus {
+    OPENED, CLOSED, BLOCKED
+}
+enum TransactionType {
+    CREDIT,DEBIT
+}
+
+input AddCustomerRequest {
+    username : String,
+    identityRef : String,
+    firstname:String,
+    lastname:String
+}
+
+input UpdateCustomerRequest {
+    username : String,
+    firstname:String,
+    lastname:String
+}
+
+type UpdateCustomerResponse {
+    id:Int,
+    message:String,
+    username:String,
+    identityRef:String,
+    firstname:String,
+    lastname:String
+}
+
+type AddCustomerResponse {
+    message:String,
+    username:String,
+    identityRef:String,
+    firstname:String,
+    lastname:String
+}
+
+input AddBankAccountRequest {
+    rib:String,
+    amount:Float,
+    customerIdentityRef:String
+}
+
+type AddBankAccountResponse {
+    message:String,
+    rib:String,
+    amount:Float,
+    createdAt:String,
+    accountStatus:AccountStatus,
+    customer:CustomerDto
+}
+
+input AddWirerTransferRequest {
+    ribFrom:String,
+    ribTo:String,
+    amount:Float,
+    username:String
+}
+
+type AddWiredTransferResponse {
+    message:String,
+    transactionFrom:TransactionDto,
+    transactionTo:TransactionDto
+}
+
+input GetTransactionListRequest {
+    rib:String,
+    dateTo : String,
+    dateFrom:String
+}

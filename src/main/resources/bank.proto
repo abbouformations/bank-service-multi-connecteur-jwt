@@ -1,0 +1,162 @@
+syntax = "proto3";
+option java_package = "ma.formations.multiconnector.grpc.stub";
+service BankService{
+  rpc customers(CustomersRequest) returns (CustomersResponse);
+  rpc customerByIdentity(CustomerByIdentityRequest) returns (CustomerByIdentityResponse);
+  rpc createCustomer(CreateCustomerRequest) returns (CreateCustomerResponse);
+  rpc updateCustomer(UpdateCustomerRequest) returns (UpdateCustomerResponse);
+  rpc deleteCustomer(DeleteCustomerRequest) returns (DeleteCustomerResponse);
+
+  rpc bankAccounts(BankAccountsRequest) returns (BankAccountsResponse);
+  rpc bankAccountByRib(BankAccountByRibRequest) returns (BankAccountByRibResponse);
+  rpc addBankAccount(AddBankAccountRequest) returns (AddBankAccountResponse);
+
+
+  rpc addWirerTransfer(AddWirerTransferRequest) returns (AddWirerTransferResponse);
+  rpc getTransactions(GetTransactionsRequest) returns (GetTransactionsResponse);
+
+}
+
+message CustomersRequest {
+}
+
+message CustomersResponse {
+  repeated CustomerDTO customers = 1;
+}
+message CustomerDTO {
+  int64 id = 1;
+  string username = 2;
+  string identityRef = 3;
+  string firstname = 4;
+  string lastname = 5;
+}
+
+message CustomerByIdentityRequest {
+  string identityRef = 1;
+}
+
+message CustomerByIdentityResponse {
+  CustomerDTO customer = 1;
+}
+
+message CreateCustomerRequest {
+  string username = 1;
+  string identityRef = 2;
+  string firstname = 3;
+  string lastname = 4;
+}
+
+message CreateCustomerResponse {
+  string message = 1;
+  CustomerDTO customer = 2;
+
+}
+
+message UpdateCustomerRequest {
+  string identityRef = 1;
+  UpdatedCustomerDTO updatedCustomer = 2;
+}
+
+message UpdatedCustomerDTO {
+  string username = 2;
+  string firstname = 4;
+  string lastname = 5;
+}
+
+
+message UpdateCustomerResponse {
+  string message = 1;
+  CustomerDTO customer = 2;
+}
+
+message DeleteCustomerRequest {
+  string identityRef = 1;
+}
+
+message DeleteCustomerResponse {
+  string message = 1;
+}
+
+message BankAccountDto {
+  int64 id = 1;
+  string rib = 2;
+  double amount = 3;
+  string createdAt = 4;
+  string accountStatus = 5;
+  CustomerDTO customer = 6;
+}
+
+message BankAccountsRequest {
+
+}
+
+message  BankAccountsResponse {
+  repeated BankAccountDto bankAccount = 1;
+}
+
+/*enum AccountStatus {
+  OPENED = 0;
+  CLOSED = 1;
+  BLOCKED = 2;
+}
+enum TransactionType {
+  CREDIT = 0;
+  DEBIT = 1;
+}*/
+
+message BankAccountByRibRequest {
+  string rib = 1;
+}
+
+message BankAccountByRibResponse {
+  BankAccountDto bankAccount = 1;
+}
+
+message AddBankAccountRequest {
+  string rib = 1;
+  double amount = 2;
+  string customerIdentityRef = 3;
+}
+
+message AddBankAccountResponse {
+  string message = 1;
+  BankAccountDto bankAccount = 2;
+}
+
+message AddWirerTransferRequest {
+  string ribFrom = 1;
+  string ribTo = 2;
+  double amount = 3;
+  string username = 4;
+}
+
+message AddWirerTransferResponse {
+  string message = 1;
+  TransactionDto transactionFrom = 2;
+  TransactionDto transactionTo = 3;
+}
+
+message GetTransactionsRequest {
+  string rib = 1;
+  string dateTo = 2;
+  string dateFrom = 3;
+}
+
+message GetTransactionsResponse {
+  repeated  TransactionDto transaction = 1;
+}
+
+message UserDto {
+  string username = 1;
+  string firstname = 2;
+  string lastname = 3;
+}
+
+message TransactionDto {
+  string createdAt = 1;
+  string transactionType = 2;
+  double amount = 3;
+  BankAccountDto bankAccount = 4;
+  UserDto user = 5;
+}
+
